@@ -32,7 +32,6 @@ import LastPageIcon from '@mui/icons-material/LastPage';
 import { useTheme,styled } from '@mui/material/styles';
 import TableCell, { tableCellClasses } from '@mui/material/TableCell';
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { parseISO } from "date-fns/esm";
 
 
 
@@ -173,7 +172,7 @@ const CustomTableCell=({row,name,onChange})=>{
 }
 
 
-const Listofcaloris = ({ items }) => {
+const Listofcaloris = ({ items,t }) => {
   /////add editable option 
   var {id}=useParams()
   items.map(item=> {
@@ -188,11 +187,11 @@ const Listofcaloris = ({ items }) => {
    
 
    useEffect(() => {
-
-    setrows(items)
-   
+   const fetch=()=>{
+      setrows(items)
+    }
+    fetch()
    }, [items])
-   console.log('x',rows)
 
   // Avoid a layout jump when reaching the last page with empty rows.
   const emptyRows =
@@ -266,22 +265,34 @@ const Listofcaloris = ({ items }) => {
    const updatehandel=async(row)=>{
         console.log(row)
         onTegoleEdit(row._id)
-  //  try{
-  //   const respons= await api.patch(`/meal/${row._id}`,{meal:row.meal,
-  //     ncal:row.ncal,
-  //     },
-  //   { headers: {'auth_token' : `Bearer ${id}`}})
+    try{
+    const respons= await api.patch(`/meal/${row._id}`,{meal:row.meal,
+      ncal:row.ncal,time:row.time,dateTime:row.dateTime
+      },
+     { headers: {'auth_token' : `Bearer ${id}`}})
 
-  //    console.log(respons.data)
-  //    onTegoleEdit(row._id)
-  //  }
-  //  catch(error){
-  //    console.log(error)
+      console.log(respons.data)
+      onTegoleEdit(row._id)
+   }
+    catch(error){
+      console.log(error)
 
-  //  }
-
+  }
 
    }
+    const delethandle=async(_id)=>{
+      try{
+        if(window.confirm('Are you sure to Delet ... ')){
+          await api.delete(`/meal/${_id}`,{ headers: {'auth_token' : `Bearer ${id}`}})
+          t()
+
+       }
+    }
+      catch(err){
+        console.log(err)
+      }
+
+    }
   return (
     <ThemeProvider theme={theme}>
 
@@ -327,7 +338,7 @@ const Listofcaloris = ({ items }) => {
                  <Button variant='contained' sx={{mx:0.5}} onClick={()=>onTegoleEdit(row._id) }>
                   <EditIcon />
                   </Button>
-                  <Button variant='contained'  sx={{mx:0.5}} >
+                  <Button variant='contained'  sx={{mx:0.5}}  onClick={()=>delethandle(row._id)} >
                     <DeleteOutlineIcon />
                     </Button>
                 </>

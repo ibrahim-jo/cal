@@ -4,7 +4,6 @@ import  InputCaloris from './InputCaloris'
 import  Listofcaloris  from './Listofcaloris'
 import {useParams}from 'react-router-dom'
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-
 import CssBaseline from "@mui/material/CssBaseline";
 const theme = createTheme();
 const Caloris = () => {
@@ -17,6 +16,7 @@ const Caloris = () => {
         const fetchData= async()=>{
           if(ismounted){
             try{
+           
               const respons= await api.get('/meals',
            { headers: {'auth_token' : `Bearer ${id}`}})
     
@@ -46,7 +46,7 @@ const Caloris = () => {
     <ThemeProvider theme={theme}>
         <CssBaseline />
     <InputCaloris   id={id}   t={test}   />
-    <Listofcaloris  items={items} />
+    <Listofcaloris  items={items}  t={test} />
     </ThemeProvider>
     
   )

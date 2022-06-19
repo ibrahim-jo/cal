@@ -68,10 +68,11 @@ router.get('/meals',verify,async(req,res)=>{
 
 router.patch('/meal/:id',verify,async(req,res)=>{
     try{
+        const time =dateTime(req.body.dateTime,req.body.time)
           const {id}=req.params
-         const update=req.body
+         const update={meal:req.body.meal,ncal:req.body.ncal,dateTime:time}
          const option={new:true}
-         const result= await calori.findByIdAndUpdate(id,update,option)
+       const result= await calori.findByIdAndUpdate(id,update,option)
         res.status(200).send(result)
 
     }
@@ -81,15 +82,29 @@ router.patch('/meal/:id',verify,async(req,res)=>{
 
 })
 
+router.delete('/meal/:id',verify,async(req,res)=>{
+    const {id}=req.params
+    try{
+        
+        await calori.findByIdAndRemove(id)
+        
+        res.status(200).send({message:'Deleted...'})
+    }
+    catch(error){
+        console.log(error)
+
+    }
+})
+
 const  dateTime=(d,t)=>{
     const date=new Date(d)
     const time= new Date(t)
-  
+
     const hh = time.getHours()
     const mm=time.getMinutes()
     date.setHours(hh)
     date.setMinutes(mm)
-     
+
      return date
 }
 
