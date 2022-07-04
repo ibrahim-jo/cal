@@ -2,9 +2,9 @@ const express = require('express')
 const router = express.Router()
 const User = require('../models/user')
 const Calori=require('../models/calori')
-const {verify,adminouth}=require('./verifytoken')
-const { findOne } = require('../models/user')
+const {verify,adminouth,paginated}=require('./verifytoken')
 const calori = require('../models/calori')
+
 
 
 router.post('/',verify,async(req,res)=>{
@@ -44,23 +44,23 @@ catch(error){
 ////get meal 
 router.get('/meals',verify,async(req,res)=>{
 
-    try{ 
-        const meal=await calori.find({userId:req.user._id})
-        console.log(meal)
-
-        if(meal.length==0){
+    const  page= parseInt (req.query.page) ||0;
+    const limt=parseInt (req.query.limt);
+    try{  
+        const  x= await paginated(req.user._id,page,limt)
+          
+        if(x.length==0){
             res.send('no mail')
 
-        }
+        }   
         else{
-        res.status(200).send(meal)
+            res.status(200).send(x)
 
         }
-   
-
-    } catch(err){
+    }
+    catch(err){
         res.status(500).send(err)
- 
+
     }
     
     
@@ -96,6 +96,27 @@ router.delete('/meal/:id',verify,async(req,res)=>{
     }
 })
 
+router.get('/testmeal',verify,async(req,res)=>{
+    const  page= parseInt (req.query.page);
+    const limt=parseInt (req.query.limt);
+    try{  
+        const  x= await paginated(req.user._id,page,limt)
+          
+        if(x.length==0){
+            res.send('no mail')
+
+        }   
+        else{
+            res.status(200).json(x)
+
+        }
+    }
+    catch(err){
+        res.status(500).send(err)
+
+    }}
+)
+
 const  dateTime=(d,t)=>{
     const date=new Date(d)
     const time= new Date(t)
@@ -107,5 +128,6 @@ const  dateTime=(d,t)=>{
 
      return date
 }
+
 
 module.exports=router

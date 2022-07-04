@@ -2,8 +2,8 @@ const express = require('express')
 const router = express.Router()
 const User = require('../models/user')
 const jwt= require('jsonwebtoken')
-const {verify,adminouth}=require('./verifytoken')
-const fns = require('date-fns')
+const {verify}=require('./verifytoken')
+const Paginated =require('./test')
 
 //Getall 
 router.get('/',async(req,res)=>{
@@ -127,21 +127,23 @@ router.delete('/:id',verify,async(req,res)=>{
 
 })
 ///////////test
-router.post('/test1',(req,res)=>{
-  
-    const date=new Date(req.body.date)
-    const time= new Date(req.body.time)
-  // const newDate=fns.formatISO(date,{representation:'date'})
-  // const newTime=fns.formatISO(time,{representation:'time'})
-   // const dateTime=`${newDate}T${newTime}`
-    const hh = time.getHours()
-    const mm=time.getMinutes()
-    date.setHours(hh)
-    date.setMinutes(mm)
+router.get('/test1',(req,res)=>{
      
-      res.status(200).send(date)
+     
+//     const date=new Date(req.body.date)
+//     const time= new Date(req.body.time)
+//   // const newDate=fns.formatISO(date,{representation:'date'})
+//   // const newTime=fns.formatISO(time,{representation:'time'})
+//    // const dateTime=`${newDate}T${newTime}`
+//     const hh = time.getHours()
+//     const mm=time.getMinutes()
+//     date.setHours(hh)
+//     date.setMinutes(mm)
+     
+//       res.status(200).send(date)
 
 })
+
 //midllware  getuser
 async function  getuse (req,res,next){
     let user 

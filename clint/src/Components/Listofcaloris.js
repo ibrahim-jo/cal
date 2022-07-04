@@ -114,7 +114,7 @@ function TablePaginationActions(props) {
 }
 
 TablePaginationActions.propTypes = {
-  count: PropTypes.number.isRequired,
+  count: PropTypes.number,
   onPageChange: PropTypes.func.isRequired,
   page: PropTypes.number.isRequired,
   rowsPerPage: PropTypes.number.isRequired,
@@ -172,15 +172,17 @@ const CustomTableCell=({row,name,onChange})=>{
 }
 
 
-const Listofcaloris = ({ items,t }) => {
+const Listofcaloris = ({ items,t ,p}) => {
   /////add editable option 
   var {id}=useParams()
-  items.map(item=> {
-      
-    return  item.time=item.dateTime,item.isEditmode=false}
-    )
+  const  x=items.result
+     const n= Number(items.len||0)
 
-  const [page, setPage] = useState(0);
+     x && x.map(item=> {
+      return  item.time=item.dateTime,item.isEditmode=false}
+      )
+        console.log(items)
+  const [page, setPage] = useState(p);
   const [rowsPerPage, setRowsPerPage] = useState(5)
   const [rows, setrows] = useState([])
   const [previous, setprevious] = useState({})
@@ -188,17 +190,18 @@ const Listofcaloris = ({ items,t }) => {
 
    useEffect(() => {
    const fetch=()=>{
-      setrows(items)
+      setrows(x)
     }
     fetch()
-   }, [items])
-
+   }, [x])
+   console.log('rsult',x)
   // Avoid a layout jump when reaching the last page with empty rows.
   const emptyRows =
-    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - items.length) : 0;
+    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - items.len) : 0;
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
+    t(newPage,rowsPerPage)
   };
 
   const handleChangeRowsPerPage = (event) => {
@@ -309,11 +312,10 @@ const Listofcaloris = ({ items,t }) => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {(rowsPerPage > 0
-            ? rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-            : 
-
-            rows).map((row) => (
+            
+            {
+             
+           rows && rows.map((row) => (
               <StyledTableRow
                 key={row._id}
                 sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
@@ -345,27 +347,19 @@ const Listofcaloris = ({ items,t }) => {
                 }
                   
                 </StyledTableCell>
-                {/* <StyledTableCell align="left" >{item.meal}</StyledTableCell>
-                <StyledTableCell align="left">
-                  {format(new Date(item.dateTime), "MM/dd/yyyy")}
-                </StyledTableCell>
-                <StyledTableCell align="left">
-                  {format(new Date(item.dateTime), "hh:mm")}
-                </StyledTableCell>
-                <StyledTableCell align="left"> {item.ncal}</StyledTableCell>
-                <StyledTableCell align="left" sx={{ width: 200 }} >
-                  <Button variant='contained' sx={{mx:0.5}}>{<EditIcon /> }</Button>
-                  <Button variant='contained'  sx={{mx:0.5}} >{<DeleteOutlineIcon />}</Button>
-                </StyledTableCell>  */}
                   
 
               </StyledTableRow>
-            ))}
+            ))
+            
+            }
+
+
             {emptyRows > 0 && (
             <TableRow style={{ height: 53 * emptyRows }}>
               <TableCell colSpan={6} />
             </TableRow>
-          )}
+            )}
 
           </TableBody>
           <TableFooter>
@@ -373,7 +367,7 @@ const Listofcaloris = ({ items,t }) => {
             <TablePagination
               rowsPerPageOptions={[5, 10, 25, { label: 'All', value: -1 }]}
               colSpan={3}
-              count={items.length}
+              count={n}
               rowsPerPage={rowsPerPage}
               page={page}
               SelectProps={{

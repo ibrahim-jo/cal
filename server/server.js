@@ -3,6 +3,7 @@ const app=express()
 const mongoose = require('mongoose')
 const  subrouter=require('./router/subrouter')
 const  prouter=require('./router/privetrouter')
+const test=require('./router/test')
 const cors  =require('cors')
 require('dotenv').config()
 
@@ -29,7 +30,7 @@ db.once('open',()=>console.log('connected db ok'))
 ///router
 app.use('/subroute',subrouter)
 app.use('/privet',prouter)
-
+app.use('/test',test)
 /////port 
 const PORT = process.env.PORT || 8000
 app.listen(PORT,()=>{
