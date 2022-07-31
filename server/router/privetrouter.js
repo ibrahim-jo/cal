@@ -14,9 +14,9 @@ router.post('/',verify,async(req,res)=>{
     res.send(firstName)
 })
 
-router.post('/admin',verify,adminouth,(req,res)=>{
+router.get('/admin',verify,adminouth,(req,res)=>{
     
-    res.send('you are admin')
+    res.send(true)
 })
 
 //entermeals
@@ -46,8 +46,10 @@ router.get('/meals',verify,async(req,res)=>{
 
     const  page= parseInt (req.query.page) ||0;
     const limt=parseInt (req.query.limt);
+    const {startt}=req.query
+    const {endt}=req.query
     try{  
-        const  x= await paginated(req.user._id,page,limt)
+        const  x= await paginated(req.user._id,page,limt,startt,endt)
           
         if(x.length==0){
             res.send('no mail')
@@ -99,8 +101,10 @@ router.delete('/meal/:id',verify,async(req,res)=>{
 router.get('/testmeal',verify,async(req,res)=>{
     const  page= parseInt (req.query.page);
     const limt=parseInt (req.query.limt);
+    const {startt}=req.query
+    const {endt}=req.query
     try{  
-        const  x= await paginated(req.user._id,page,limt)
+        const  x= await paginated(req.user._id,page,limt,startt,endt)
           
         if(x.length==0){
             res.send('no mail')
