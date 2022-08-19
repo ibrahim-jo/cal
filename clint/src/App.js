@@ -5,6 +5,7 @@ import Layout from "./Components/layout";
 import Home from './Components/Home'
 import Test1 from './Components/Test1'
 import Missing from './Components/Missing'
+import Adminpage from './Components/Adminpage'
 import {Routes,Route} from 'react-router-dom'
 import Caloris from "./Components/Caloris";
 import  RequerAuth from './Components/RequerAuth'
@@ -24,6 +25,7 @@ function App() {
              <Route element={<RequerAuth />}>
                <Route path='/'  element={<Home />} />
         <Route  path='/caloris/:id'   element ={< Caloris/>} />
+        <Route path='/admin/:id'  element={<Adminpage />}/>
         </Route>
         {/*catch all */}
         <Route path="*"   element={<Missing />} />

@@ -9,7 +9,6 @@ const verify = (req, res, next) => {
   if (!token) res.status(401).send("Acsses Denay");
   try {
     const verified = jwt.verify(token, process.env.TOKEN_SECRET);
-
     req.user = verified;
     next();
   } catch (err) {
@@ -35,7 +34,8 @@ const adminouth = async (req, res, next) => {
   }
 };
 //// paginated
-async function paginated(userid, page, limt, startt, endt) {
+async function paginated(userid,page, limt, startt, endt) {
+  
   try {
     console.log('server_startt',startt,'s_endt',endt)
     if (startt && endt != undefined) {
@@ -98,5 +98,8 @@ async function paginated(userid, page, limt, startt, endt) {
 
   return result;
 }
+
+
+
 
 module.exports = { verify, adminouth, paginated };

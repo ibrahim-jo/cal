@@ -97,6 +97,30 @@ router.delete('/meal/:id',verify,async(req,res)=>{
 
     }
 })
+//forAdmin user
+router.get('/controlusers',verify,adminouth,async(req,res)=>{
+    try {const  page= parseInt (req.query.page) ||0;
+     const limt=parseInt (req.query.limt);
+     const startIndex =page * limt;
+     const count= await User.aggregate([{$count:'mycount'}])
+     const x=count[0].mycount
+     result = {};
+     if (startIndex < x) {
+       result.next = { page: page + 1, limt: limt };
+     }
+     if (startIndex > 0) {
+       result.previous = { page: page - 1, limt: limt };
+     }
+     result.data=await User.find().skip(page * limt > 0 ? page * limt : 0)
+     .limit(limt);
+    console.log('x',count[0].mycount)
+   
+   res.send(result)}
+   catch(err){
+     res.status(500).send(err);
+   }
+   })
+
 
 router.get('/testmeal',verify,async(req,res)=>{
     const  page= parseInt (req.query.page);

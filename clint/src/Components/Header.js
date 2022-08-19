@@ -5,8 +5,9 @@ import {AppBar,MenuItem,Menu,Box,Toolbar,Typography
 import UseAuth from '../hooks/UseAuth'
 import api from '../Api/privet'
 
+import {Link} from 'react-router-dom'
 const Header=()=> {
-  const {auth}=UseAuth()
+  const {auth,setAuth}=UseAuth()
   const [anchorEl, setAnchorEl] = useState(null)
   const [isAdmin, setisAdmin] = useState(false)
   const openMenu=Boolean(anchorEl)
@@ -84,7 +85,12 @@ console.log('stateofisadmin',isAdmin);
               >
           
                 <MenuItem onClick={handleClose}>Profile</MenuItem>
-               { isAdmin?<MenuItem onClick={handleClose}>Admin</MenuItem>:null}
+               { isAdmin?<MenuItem onClick={handleClose}>
+                <Link to={`/admin/${auth.token}`}>Admin </Link>
+                </MenuItem>:null}
+                 <MenuItem onClick={handleClose}>
+                <Link to={'/'}  onClick={()=>setAuth('')} >Logout </Link>
+                </MenuItem>
               </Menu>
         </Toolbar>
       </AppBar>
